@@ -1,6 +1,6 @@
 # Data Warehouse AdventureWorks — OLAP & ETL Incremental
 
-Projeto acadêmico da disciplina de Engenharia de Dados (Unisales) — construção de um Data Warehouse dimensional (Star Schema) a partir do banco transacional AdventureWorks2016, com ETL incremental em Python.
+Projeto acadêmico da disciplina Projeto de Análise e Fluxo de Dados - OLAP e ETL  — construção de um Data Warehouse dimensional (Star Schema) a partir do banco transacional AdventureWorks2016, com ETL incremental em Python.
 
 ## Objetivo
 
@@ -12,11 +12,11 @@ Modelar e implementar um Data Warehouse de vendas seguindo o padrão **Star Sche
 SQL Server (AdventureWorks2016 - OLTP)
         │
         │  extração incremental (watermark por ModifiedDate)
-        ▼
+        
 PostgreSQL - schema "staging"
         │
         │  transformação (joins, hierarquias, resolução de chaves)
-        ▼
+        
 PostgreSQL - schema "dw" (Star Schema)
         ├── dim_date
         ├── dim_product
