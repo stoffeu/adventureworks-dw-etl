@@ -78,7 +78,7 @@ Consultas completas em [`sql_kpis/02_kpis_sql.sql`](sql_kpis/02_kpis_sql.sql).
 
 ## Autor(es)
 
-- [Breno Souza Peixoto, Estevão,Kaike Stofel de Oliveira Lima, Thiago Campos Xavier ] — [curso/instituição]
+- [Breno Souza Peixoto, Estevão Cunha de Sá Viana,Kaike Stofel de Oliveira Lima, Thiago Campos Xavier ] — [curso/instituição]
 
 ## Referências
 
