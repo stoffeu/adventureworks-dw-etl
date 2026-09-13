@@ -1,14 +1,6 @@
--- ============================================================================
--- CONSULTAS SQL — COMPROVAÇÃO DOS 10 INDICADORES (KPIs)
--- Data Warehouse AdventureWorks (Star Schema) — PostgreSQL
--- ============================================================================
 
+- KPI 1 — Receita total de vendas por período (mês/ano)
 
--- ============================================================================
--- KPI 1 — Receita total de vendas por período (mês/ano)
--- Métrica aditiva simples: soma de line_total agrupada pela hierarquia de
--- tempo da dim_date.
--- ============================================================================
 SELECT
     dd.year,
     dd.month,
@@ -20,11 +12,9 @@ GROUP BY dd.year, dd.month, dd.month_name
 ORDER BY dd.year, dd.month;
 
 
--- ============================================================================
--- KPI 2 — Ticket médio por pedido
--- Primeiro agregamos por pedido (sales_order_id), depois tiramos a média
--- sobre os totais de pedido -- não confundir com média por linha de item.
--- ============================================================================
+
+- KPI 2 — Ticket médio por pedido
+
 SELECT
     ROUND(AVG(total_pedido), 2) AS ticket_medio
 FROM (
@@ -36,10 +26,9 @@ FROM (
 ) pedidos;
 
 
--- ============================================================================
--- KPI 3 — Quantidade vendida por categoria de produto
--- Usa a hierarquia categoria > subcategoria já resolvida na dim_product.
--- ============================================================================
+
+- KPI 3 — Quantidade vendida por categoria de produto
+
 SELECT
     dp.category_name,
     SUM(fs.order_qty) AS quantidade_total_vendida,
@@ -50,9 +39,9 @@ GROUP BY dp.category_name
 ORDER BY quantidade_total_vendida DESC;
 
 
--- ============================================================================
--- KPI 4 — Top N produtos por receita (exemplo com N = 10)
--- ============================================================================
+
+- KPI 4 — Top N produtos por receita (exemplo com N = 10)
+
 SELECT
     dp.product_name,
     dp.category_name,
@@ -65,9 +54,9 @@ ORDER BY receita_total DESC
 LIMIT 10;
 
 
--- ============================================================================
--- KPI 5 — Receita por território de vendas
--- ============================================================================
+
+- KPI 5 — Receita por território de vendas
+
 SELECT
     dt.territory_name,
     dt.territory_group,
@@ -79,12 +68,9 @@ GROUP BY dt.territory_name, dt.territory_group
 ORDER BY receita_total DESC;
 
 
--- ============================================================================
+
 -- KPI 6 — Desempenho de vendas por vendedor
--- Inclui o "unknown member" (sales_person_key = -1), que agrega todas as
--- vendas do canal online sem vendedor associado -- técnica de modelagem
--- dimensional (Kimball) aplicada para não perder linhas em INNER JOIN.
--- ============================================================================
+
 SELECT
     dsp.full_name,
     dsp.is_unknown_member,
@@ -96,10 +82,9 @@ GROUP BY dsp.full_name, dsp.is_unknown_member
 ORDER BY receita_total DESC;
 
 
--- ============================================================================
+
 -- KPI 7 — Receita por canal de venda (Online vs Revenda)
--- Usa a flag online_order_flag armazenada diretamente na fato.
--- ============================================================================
+
 SELECT
     CASE WHEN fs.online_order_flag THEN 'Online' ELSE 'Revenda' END AS canal_venda,
     COUNT(DISTINCT fs.sales_order_id) AS qtd_pedidos,
@@ -110,11 +95,9 @@ GROUP BY fs.online_order_flag
 ORDER BY receita_total DESC;
 
 
--- ============================================================================
+
 -- KPI 8 — Impacto de descontos/promoções na receita
--- Compara receita bruta (sem desconto) vs receita líquida (com desconto
--- aplicado), por tipo de promoção.
--- ============================================================================
+
 SELECT
     dpr.promotion_type,
     dpr.description,
@@ -128,11 +111,9 @@ GROUP BY dpr.promotion_type, dpr.description
 ORDER BY valor_total_descontado DESC;
 
 
--- ============================================================================
+
 -- KPI 9 — Margem bruta estimada (receita - custo do produto)
--- standard_cost é o custo unitário; multiplicamos pela quantidade vendida
--- para obter o custo total da linha, e comparamos com line_total (receita).
--- ============================================================================
+
 SELECT
     dp.category_name,
     ROUND(SUM(fs.line_total), 2) AS receita_total,
@@ -148,11 +129,9 @@ GROUP BY dp.category_name
 ORDER BY margem_bruta DESC;
 
 
--- ============================================================================
+
 -- KPI 10 — Novos clientes por período (primeira compra de cada cliente)
--- Identifica a data da primeira compra de cada cliente (MIN date_key) e
--- agrupa por ano/mês dessa primeira compra.
--- ============================================================================
+
 WITH primeira_compra AS (
     SELECT
         customer_key,
