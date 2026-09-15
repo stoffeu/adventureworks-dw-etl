@@ -4,7 +4,7 @@ SQLSERVER_CONFIG = {
     "driver": "{ODBC Driver 17 for SQL Server}",
     "server": "localhost",
     "database": "AdventureWorks2016",
-    "trusted_connection": "yes",  # Windows Authentication
+    "trusted_connection": "yes", 
 }
 
 def get_sqlserver_connection_string() -> str:
