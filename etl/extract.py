@@ -195,7 +195,7 @@ EXTRACTIONS = [
 
 
 def get_watermark(pg_conn, source_table: str) -> datetime:
-    """Lê o último ModifiedDate processado com sucesso para a tabela dada."""
+
     with pg_conn.cursor() as cur:
         cur.execute(
             "SELECT last_extracted_timestamp FROM staging.etl_control "
@@ -207,7 +207,7 @@ def get_watermark(pg_conn, source_table: str) -> datetime:
 
 
 def update_watermark(pg_conn, source_table: str, new_watermark: datetime, rows_processed: int):
-    """Atualiza o watermark após uma extração bem-sucedida."""
+
     with pg_conn.cursor() as cur:
         cur.execute(
             """
@@ -223,11 +223,7 @@ def update_watermark(pg_conn, source_table: str, new_watermark: datetime, rows_p
 
 
 def upsert_staging_rows(pg_conn, staging_table: str, columns: list, pk_columns: list, rows: list):
-    """
-    Insere as linhas extraídas na tabela de staging do PostgreSQL, usando
-    upsert (INSERT ... ON CONFLICT DO UPDATE) para lidar tanto com registros
-    novos quanto com registros modificados.
-    """
+
     if not rows:
         return
 
@@ -250,7 +246,7 @@ def upsert_staging_rows(pg_conn, staging_table: str, columns: list, pk_columns: 
 
 
 def run_extraction():
-    """Executa a extração incremental de todas as tabelas configuradas."""
+
     sql_conn = get_sqlserver_connection()
     pg_conn = get_postgres_connection()
 
@@ -277,8 +273,7 @@ def run_extraction():
                 print(f"[{source_table}] nenhuma linha nova/modificada. Nada a fazer.")
                 continue
 
-            # Última coluna de cada linha é sempre modified_date, conforme
-            # definido nas queries de extração acima.
+            
             modified_date_idx = columns.index("modified_date")
             new_watermark = max(row[modified_date_idx] for row in rows)
 
