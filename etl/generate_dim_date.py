@@ -18,7 +18,7 @@ def generate_dates(start_date: date, end_date: date):
     while current <= end_date:
         date_key = int(current.strftime("%Y%m%d"))
         day = current.day
-        day_of_week_iso = current.isoweekday()  # 1=segunda ... 7=domingo
+        day_of_week_iso = current.isoweekday()  
         day_name = DIAS_SEMANA_PT[day_of_week_iso - 1]
         month = current.month
         month_name = MESES_PT[month - 1]
